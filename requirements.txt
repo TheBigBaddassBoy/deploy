@@ -94,8 +94,6 @@ python-multipart==0.0.20
 pytweening==1.2.0
 pytz==2025.1
 pywhatkit==5.4
-pywin32==308
-pywin32-ctypes==0.2.3
 requests==2.32.3
 requests-oauthlib==2.0.0
 rivescript==1.15.0
