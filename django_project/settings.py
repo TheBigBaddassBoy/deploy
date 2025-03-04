@@ -32,8 +32,8 @@ if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://3553-2806-266-2400-98-6c79-ace9-691f-c6cd.ngrok-free.app",
-]
+    f"https://{RENDER_EXTERNAL_HOSTNAME}"  # Agregar automáticamente el dominio de Render
+] if RENDER_EXTERNAL_HOSTNAME else []
 
 # Application definition
 INSTALLED_APPS = [
