@@ -1,0 +1,95 @@
+<h2>📌 Tareas Subidas por Alumnos</h2>
+<div class="contenedor">
+    {% for tarea_alumno in tareas_alumnos %}
+    <div class="card">
+        <h3>📂 {{ tarea_alumno.tarea.nombre }}</h3>
+        <p>👨‍🎓 Alumno: <strong>{{ tarea_alumno.usuario.username }}</strong></p>
+        <p>📅 Fecha de Entrega: {{ tarea_alumno.fecha_entrega }}</p>
+
+        {% if tarea_alumno.archivo %}
+            <a href="{{ tarea_alumno.archivo.url }}" class="btn btn-descargar" download>⬇️ Descargar</a>
+        {% else %}
+            <p>⚠️ No disponible</p>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="tarea_id" value="{{ tarea_alumno.id }}">
+            
+            <label for="calificacion">🎯 Calificación:</label>
+            <input type="number" name="calificacion" min="0" max="10" value="{{ tarea_alumno.calificacion|default:'' }}" required>
+            
+            <button type="submit" class="btn btn-subir">✅ Calificar</button>
+        </form>
+
+        <p><strong>📊 Calificación: </strong>
+            {% if tarea_alumno.calificacion is not None %}
+                {{ tarea_alumno.calificacion }}/10
+            {% else %}
+                🕒 Aún no calificada
+            {% endif %}
+        </p>
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+    .card {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .card:before {
+        content: '';
+        position: absolute;
+        top: -75px;
+        left: -75px;
+        width: 150px;
+        height: 150px;
+        background: rgba(0, 123, 255, 0.2);
+        border-radius: 50%;
+        transition: background 0.3s ease;
+    }
+
+    .card:hover:before {
+        background: rgba(0, 123, 255, 0.4);
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 10px 15px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 14px;
+        margin-top: 10px;
+        transition: 0.3s;
+    }
+
+    .btn-descargar {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .btn-descargar:hover {
+        background-color: #218838;
+    }
+
+    .btn-subir {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .btn-subir:hover {
+        background-color: #0056b3;
+    }
+</style>

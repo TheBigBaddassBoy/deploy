@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<style>
+  :root {
+    --background-light: #f9f9f9;
+    --background-dark: #333;
+    --text-light: #000;
+    --text-dark: #fff;
+    --border-light: #ccc;
+    --border-dark: #444;
+    --button-bg-light: rgba(0, 76, 94, 0.59);
+    --button-bg-dark: rgba(0, 76, 94, 0.8);
+    --input-bg-light: #fff;
+    --input-bg-dark: #555;
+    --input-text-light: #000;
+    --input-text-dark: #fff;
+  }
+
+  body {
+    background-color: var(--background-light);
+    color: var(--text-light);
+    font-family: 'Arial', sans-serif;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  .login-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    background-color: var(--background-light);
+    color: var(--text-light);
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+  }
+
+  .login-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+  }
+
+  .login-container form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .login-container form input {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid var(--border-light);
+    border-radius: 5px;
+    background-color: var(--input-bg-light);
+    color: var(--input-text-light);
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+  }
+
+  .login-container form button {
+    padding: 10px;
+    background-color: var(--button-bg-light);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .login-container form button:hover {
+    background-color: var(--button-bg-dark);
+  }
+
+  .dark-mode body {
+    background-color: var(--background-dark);
+    color: var(--text-dark);
+  }
+
+  .dark-mode .login-container {
+    border: 1px solid var(--border-dark);
+    background-color: var(--background-dark);
+    color: var(--text-dark);
+  }
+
+  .dark-mode .login-container form input {
+    border: 1px solid var(--border-dark);
+    background-color: var(--input-bg-dark);
+    color: var(--input-text-dark);
+  }
+
+  .dark-mode .login-container form button {
+    background-color: var(--button-bg-dark);
+  }
+
+  .dark-mode .login-container form button:hover {
+    background-color: var(--button-bg-light);
+  }
+
+  #toggle-mode {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px;
+    background-color: var(--button-bg-light);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  #toggle-mode:hover {
+    background-color: var(--button-bg-dark);
+  }
+</style>
+
+<button id="toggle-mode">Toggle Dark Mode</button>
+
+<div class="login-container">
+  <h2>Log In</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Log In</button>
+  </form>
+</div>
+
+<script>
+  const toggleButton = document.getElementById('toggle-mode');
+  toggleButton.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+  });
+</script>
+{% endblock %}

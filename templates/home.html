@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% csrf_token %}
+
+{% block content %}
+<div class="text-center mt-5">
+    {% if user.is_authenticated %}
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                    {% if user.is_superuser %}
+                        Maestro
+                    {% else %}
+                        Alumno
+                    {% endif %}
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Menú
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-dark">
+                                {% if user.is_superuser %}
+                                    <li><a class="dropdown-item" href="{% url 'admin:auth_user_changelist' %}">Alumnos</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'admin:auth_user_add' %}">Agregar Alumno</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'admin:index' %}">Panel de Administración</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'tareas:lista_tareas' %}">Tareas Asignadas</a></li>
+                                    <li><a class="dropdown-item" href="https://ciromtz.blogspot.com/">Contenido</a></li>
+                                {% else %}
+                                    <li><a class="dropdown-item" href="{% url 'tareas:lista_tareas' %}">Tareas</a></li>
+                                {% endif %}
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form action="{% url 'logout' %}" method="post" style="margin: 0;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="dropdown-item">Cerrar sesión</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container mt-5 pt-5">
+            <h1 class="display-4 text-primary">¡Bienvenido, {{ user.username }}!</h1>
+            <p class="lead">Nos alegra verte de nuevo.</p>
+        </div>
+
+    {% else %}
+        <div class="container mt-5 pt-5">
+            <h1 class="display-4 text-primary">¡Bienvenido a nuestro sitio!</h1>
+            <p class="lead">Por favor, inicia sesión para continuar.</p>
+            <a href="{% url 'login' %}" class="btn btn-primary btn-lg">Iniciar Sesión</a>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Bootstrap Bundle with Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Custom CSS -->
+<style>
+    body {
+        background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .navbar-brand {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+    .dropdown-menu-dark {
+        background-color: #343a40;
+    }
+    .dropdown-item:hover {
+        background-color: #495057;
+    }
+    .display-4 {
+        font-weight: 300;
+    }
+    .lead {
+        font-size: 1.25rem;
+    }
+</style>
+{% endblock %}

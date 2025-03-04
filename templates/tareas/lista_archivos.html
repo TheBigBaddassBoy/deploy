@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📚 Lista de Tareas</title>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            text-align: center;
+        }
+
+        /* Encabezado */
+        h1 {
+            background: linear-gradient(to right, #007bff, #00c6ff);
+            color: white;
+            padding: 20px;
+            margin: 0;
+            font-size: 28px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Botón de inicio */
+        .btn-inicio {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.3s;
+            display: inline-block;
+            margin: 10px;
+        }
+
+        .btn-inicio:hover {
+            background-color: #0056b3;
+        }
+
+        /* Contenedor de tarjetas */
+        .contenedor {
+            width: 90%;
+            margin: 20px auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        /* Estilo para tarjetas */
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Efecto hover en tarjetas */
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .card:before {
+            content: '';
+            position: absolute;
+            top: -75px;
+            left: -75px;
+            width: 150px;
+            height: 150px;
+            background: rgba(0, 123, 255, 0.2);
+            border-radius: 50%;
+            transition: background 0.3s ease;
+        }
+
+        .card:hover:before {
+            background: rgba(0, 123, 255, 0.4);
+        }
+
+        /* Botones */
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        .btn-descargar {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-descargar:hover {
+            background-color: #218838;
+        }
+
+        .btn-subir {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-subir:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-calificar {
+            background-color: #ff5722;
+            color: white;
+        }
+
+        .btn-calificar:hover {
+            background-color: #d84315;
+        }
+
+        /* Botón flotante "Nueva Tarea" */
+        .btn-nueva {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #ffcc00, #ff5722);
+            color: white;
+            font-weight: bold;
+            padding: 12px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-nueva:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Botón flotante "Mis Tareas" */
+        .btn-mistareas {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: linear-gradient(45deg, #28a745, #007bff);
+            color: white;
+            font-weight: bold;
+            padding: 12px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-mistareas:hover {
+            transform: scale(1.1);
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>📚 Lista de Tareas</h1>
+
+    <a href="{% url 'home' %}" class="btn-inicio">🏠 Inicio</a>
+
+    <h2>📌 Tareas Asignadas</h2>
+    <div class="contenedor">
+        {% for tarea in tareas_creadas %}
+        <div class="card">
+            <h3>📝 {{ tarea.nombre }}</h3>
+            <p>📅 Fecha Límite: {{ tarea.fecha_limite }}</p>
+            <p>📅 Fecha de Creación: {{ tarea.fecha_creacion }}</p>
+            <p>👨‍🏫 Profesor: <strong>{{ tarea.usuario.username }}</strong></p>
+            <p>📄 Descripción: {{ tarea.descripcion }}</p>
+            <p>📚 Módulo: {{ tarea.modulo }}</p>
+            {% if tarea.archivo %}
+                <a href="{{ tarea.archivo.url }}" class="btn btn-descargar" download>⬇️ Descargar</a>
+            {% else %}
+                <p>⚠️ No disponible</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if es_superuser %}
+    <h2>📝 Tareas Subidas por Alumnos</h2>
+    <div class="contenedor">
+        {% for tarea_alumno in tareas_alumnos %}
+        <div class="card">
+            <h3>📂 {{ tarea_alumno.tarea.nombre }}</h3>
+            <p>👨‍🎓 Alumno: <strong>{{ tarea_alumno.usuario.username }}</strong></p>
+            <p>📅 Fecha de Entrega: {{ tarea_alumno.fecha_entrega }}</p>
+            
+            {% if tarea_alumno.archivo %}
+                <a href="{{ tarea_alumno.archivo.url }}" class="btn btn-descargar" download>⬇️ Descargar</a>
+            {% else %}
+                <p>⚠️ No disponible</p>
+            {% endif %}
+
+            <!-- Botón de calificación solo para profesores -->
+            <a href="{% url 'tareas:calificar_tarea' tarea_alumno.tarea.id %}" class="btn btn-calificar">✏️ Calificar</a>
+
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+
+    <!-- Botón flotante "Nueva Tarea" -->
+    <a href="{% url 'tareas:subir_tarea' %}" class="btn-nueva">➕ Nueva Tarea</a>
+
+    {% if not es_superuser %}
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="{% url 'tareas:subir_tarea_alumno' %}" class="btn btn-subir">📤 Subir Tarea</a>
+    </div>
+
+    <!-- Botón flotante "Mis Tareas" -->
+    <a href="{% url 'tareas:mis_calificaciones' %}" class="btn-mistareas">📋 Subir Tareas/Calificaciones</a>
+    {% endif %}
+
+</body>
+</html>

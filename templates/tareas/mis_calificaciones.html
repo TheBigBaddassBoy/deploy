@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📊 Mis Calificaciones</title>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            text-align: center;
+        }
+
+        /* Encabezado */
+        h1 {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            margin: 0;
+            font-size: 28px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Contenedor de tarjetas */
+        .contenedor {
+            width: 90%;
+            margin: 20px auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        /* Estilo para tarjetas */
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Efecto hover en tarjetas */
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Botones */
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        .btn-descargar {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-descargar:hover {
+            background-color: #218838;
+        }
+
+        .btn-subir {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-subir:hover {
+            background-color: #0056b3;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>📊 Mis Calificaciones</h1>
+
+    <div class="contenedor">
+        {% for tarea_alumno in tareas_alumnos_usuario %}
+        <div class="card">
+            <h3>📂 {{ tarea_alumno.tarea.nombre }}</h3>
+            <p>📅 Fecha de Entrega: {{ tarea_alumno.fecha_entrega }}</p>
+            
+            {% if tarea_alumno.archivo %}
+                <a href="{{ tarea_alumno.archivo.url }}" class="btn btn-descargar" download>⬇️ Descargar</a>
+            {% else %}
+                <p>⚠️ No disponible</p>
+            {% endif %}
+
+            <p><strong>🎯 Calificación:</strong> 
+                {% if tarea_alumno.calificacion is not None %}
+                    {{ tarea_alumno.calificacion }}/10
+                {% else %}
+                    🕒 Aún no calificada
+                {% endif %}
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="{% url 'tareas:subir_tarea_alumno' %}" class="btn btn-subir">📤 Subir Tarea</a>
+    </div>
+
+</body>
+</html>
