@@ -25,6 +25,11 @@ CSRF_TRUSTED_ORIGINS = [
 
 # Permitir Blogspot en CSRF
 CSRF_TRUSTED_ORIGINS.append("https://pedagogiaaula.blogspot.com")
+CSRF_COOKIE_SAMESITE = "None"  # Permite cookies en diferentes dominios
+CSRF_COOKIE_SECURE = True      # Requiere HTTPS para enviar cookies
+SESSION_COOKIE_SAMESITE = "None"
+SESSION_COOKIE_SECURE = True
+
 
 INSTALLED_APPS = [
     "django.contrib.admin",
